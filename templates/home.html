@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>File Sharing</title>
+	<style>
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			background-color: #f2f2f2;
+			padding: 20px;
+			box-sizing: border-box;
+			font-family: Arial, sans-serif;
+		}
+		h1 {
+			text-align: center;
+			margin-top: 0;
+		}
+		form {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+		form label {
+			display: block;
+			margin-bottom: 10px;
+			width: 100%;
+			font-weight: bold;
+			font-size: 1.2em;
+		}
+		form input[type="text"],
+		form input[type="file"] {
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			background-color: #fff;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+			margin-right: 10px;
+			margin-bottom: 10px;
+			flex: 1;
+		}
+		form input[type="submit"] {
+			padding: 10px 20px;
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.2s;
+		}
+		form input[type="submit"]:hover {
+			background-color: #3e8e41;
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-bottom: 20px;
+		}
+		table th,
+		table td {
+			padding: 10px;
+			border: 1px solid #ddd;
+			text-align: left;
+			font-size: 1.1em;
+		}
+		table th {
+			background-color: #4CAF50;
+			color: #fff;
+		}
+	</style>
+	<script>
+		const form = document.getElementById("upload-form");
+const submitBtn = document.getElementById("submit-btn");
+
+submitBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+
+  const fileInput = document.getElementById("file-input");
+  const file = fileInput.files[0];
+  const formData = new FormData();
+
+  formData.append("file", file);
+
+  const xhr = new XMLHttpRequest();
+
+  xhr.upload.addEventListener("progress", (event) => {
+    const progressBar = document.getElementById("progress-bar");
+    progressBar.value = event.loaded / event.total;
+  });
+
+  xhr.open("POST", "/upload");
+  xhr.send(formData);
+});
+
+	</script>
+</head>
+<body>
+	<div class="container">
+		<h1>File Sharing</h1>
+		<form action="/upload" method="post" enctype="multipart/form-data">
+			<label for="peer_ip">Peer IP:</label>
+			<input type="text" id="peer_ip" name="peer_ip" required>
+			<label for="file">Select file:</label>
+			<input type="file" id="file" name="file" required>
+			<input type="submit" value="Send">
+		</form>
+		<progress id="progress-bar" value="0" max="1"></progress>
+	</div>
+</body>
+</html>
+
